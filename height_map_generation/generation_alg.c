@@ -4,92 +4,83 @@
 #include <math.h>
 #include "generation_alg.h"
 
-int MAX_RAND = 5;
-
-static void print_map(Tile** map, int size) {
-	for (int y = 0;y < size; y++) {
-		for (int x = 0; x < size; x++) {
-			printf("%f ", map[y][x].height);
-		}
-		printf("\n");
+static float**allocate_map(int size) {
+	float** map = (float**)malloc(size * sizeof(float*));
+	for (int i = 0; i < size; i++) {
+		map[i] = (float*)malloc(size * sizeof(float));
 	}
+	return map;
 }
 
-static float _random_num (float scale, float avg) {
+static float _random_num (float roughness, float avg) {
 	float rand_val = (float)rand() / RAND_MAX;
-	return (scale * rand_val) + (1.0 - scale) * avg;
+	return (roughness * rand_val  + (1.0 - roughness) * avg);
 }
 
-void diamond_step (Tile** map, int size, int step, float scale) {
+void diamond_step (float** map, int size, int step, float roughness) {
 	int half = step / 2;
 	for (int y = half; y < size; y += step) {
 		for (int x = half; x < size; x += step) {
-			float avg = (map[y - half][x - half].height +
-				map[y - half][x + half].height +
-				map[y + half][x - half].height +
-				map[y + half][x + half].height) * 0.25f;
-			map[y][x].height = _random_num(scale, avg);
+			float avg = (1/map[y - half][x - half] +
+				1/map[y - half][x + half] +
+				1/map[y + half][x - half] +
+				1/map[y + half][x + half]) * 4;
+			map[y][x] = _random_num(roughness, avg);
 		}
 	}
 }
 
-void square_step (Tile** map, int size, int step, float scale) {
+void square_step (float** map, int size, int step, float roughness) {
 	int half = step / 2;
 	for (int y = 0; y < size; y += half) {
 		int start_x = (y % step == 0) ? half : 0;
-		for (int x = start_x; x < scale; x += step) {
+		for (int x = start_x; x < size; x += step) {
 			float sum = 0.0f;
 			int count = 0;
 
 			if (y >= half) {
-				sum += 1/map[y - half][x].height;
+				sum += 1/map[y - half][x];
 				count++;
 			}
 			if (y + half < size) {
-				sum += 1/map[y + half][x].height;
+				sum += 1/map[y + half][x];
 				count++;
 			}
 			if (x >= half) {
-				sum += 1/map[y][x - half].height;
+				sum += 1/map[y][x - half];
 				count++;
 			}
 			if (x + half < size) {
-				sum += 1/map[y][x + half].height;
+				sum += 1/map[y][x + half];
 				count++;
 			}
-			map[y][x].height = (sum / count) + _random_num(scale, sum / count);
+			map[y][x] = _random_num(roughness, sum * count);
 		}
 	}
 }
 
-void ds_gen_height_map (Tile** map, int size, float roughness) {
+float** ds_gen_height_map (int size, float roughness, int max_rand) {
+	float** map = allocate_map(size);
 	int n = size - 1;
 	if (n <= 0 || (n & (n - 1)) != 0) {
 		printf("Err^ size must be 2^n+1\n");
 		exit(EXIT_FAILURE);
 	}
-	map[0][0].height = _random_num(roughness, MAX_RAND);
-	printf("%f ", map[0][0].height);
-	map[0][size - 1].height = _random_num(roughness, MAX_RAND);
-	printf("%f ", map[0][size - 1].height);
-	map[size - 1][0].height = _random_num(roughness, MAX_RAND);
-	printf("%f ", map[size - 1][0].height);
-	map[size - 1][size - 1].height = _random_num(roughness, MAX_RAND);
-	printf("%f\n ", map[size - 1][size - 1].height);
-
-	float scale = roughness;
+	map[0][0] = (float)rand() / RAND_MAX;
+	map[0][size - 1] = (float)rand() / RAND_MAX;
+	map[size - 1][0] = (float)rand() / RAND_MAX;
+	map[size - 1][size - 1] = (float)rand() / RAND_MAX;
 	int step = size - 1;
 
 	while (step > 1) {
-		diamond_step(map, size, step, scale);
-		square_step(map, size, step, scale);
-		print_map(map, size);
-		printf("\n");
+		diamond_step(map, size, step, roughness);
+		square_step(map, size, step, roughness);
 		step /= 2;
 	}
+	return map;
 }
 
-void apply_gaussian_filter(Tile** input, Tile** output, int size, float sigma) {
+void apply_gaussian_filter(float** input, float** output, int size, float sigma) {
 	const int kernel_radius = 2;
 	const int kernel_size = 2 * kernel_radius + 1;
 	float kernel[5][5];
@@ -125,10 +116,10 @@ void apply_gaussian_filter(Tile** input, Tile** output, int size, float sigma) {
 					if (ny >= size) ny = size - 1;
 					if (nx >= size) nx = size - 1;
 
-					value += input[ny][nx].height * kernel[ky + kernel_radius][kx + kernel_radius];
+					value += input[ny][nx] * kernel[ky + kernel_radius][kx + kernel_radius];
 				}
 			}
-			output[y][x].height = value;
+			output[y][x] = value;
 		}
 	}
 }

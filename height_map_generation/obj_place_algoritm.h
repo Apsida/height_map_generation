@@ -1,2 +1,4 @@
-//#pragma once
-//#include "Tile.h"
+#pragma once
+#include "Tile.h"
+
+void place(Tile** map, int size);

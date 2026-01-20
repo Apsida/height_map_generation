@@ -123,15 +123,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="biome_defin_alg.c" />
     <ClCompile Include="generation_alg.c" />
     <ClCompile Include="main.c" />
+    <ClCompile Include="map_IO.c" />
     <ClCompile Include="obj_place_algoritm.c" />
+    <ClCompile Include="UI.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Config.h" />
+    <ClInclude Include="biome_defin_alg.h" />
     <ClInclude Include="generation_alg.h" />
+    <ClInclude Include="map_IO.h" />
+    <ClInclude Include="Obj.h" />
     <ClInclude Include="obj_place_algoritm.h" />
     <ClInclude Include="Tile.h" />
+    <ClInclude Include="Tile_param.h" />
+    <ClInclude Include="UI.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
