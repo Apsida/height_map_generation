@@ -125,11 +125,12 @@
   <ItemGroup>
     <ClCompile Include="generation_alg.c" />
     <ClCompile Include="main.c" />
+    <ClCompile Include="obj_place_algoritm.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Config.h" />
     <ClInclude Include="generation_alg.h" />
-    <ClInclude Include="Object.h" />
+    <ClInclude Include="obj_place_algoritm.h" />
     <ClInclude Include="Tile.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

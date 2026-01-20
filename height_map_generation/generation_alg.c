@@ -5,11 +5,18 @@
 #include "generation_alg.h"
 
 int MAX_RAND = 5;
-//int SEED = 234121;
 
+static void print_map(Tile** map, int size) {
+	for (int y = 0;y < size; y++) {
+		for (int x = 0; x < size; x++) {
+			printf("%f ", map[y][x].height);
+		}
+		printf("\n");
+	}
+}
 
 static float _random_num (float scale, float avg) {
-	double rand_val = (double)rand() / RAND_MAX;
+	float rand_val = (float)rand() / RAND_MAX;
 	return (scale * rand_val) + (1.0 - scale) * avg;
 }
 
@@ -50,8 +57,7 @@ void square_step (Tile** map, int size, int step, float scale) {
 				sum += 1/map[y][x + half].height;
 				count++;
 			}
-			printf("%f\n", sum / count);
-			map[y][x].height = sum / count + _random_num(scale, sum / count);
+			map[y][x].height = (sum / count) + _random_num(scale, sum / count);
 		}
 	}
 }
@@ -63,9 +69,13 @@ void ds_gen_height_map (Tile** map, int size, float roughness) {
 		exit(EXIT_FAILURE);
 	}
 	map[0][0].height = _random_num(roughness, MAX_RAND);
+	printf("%f ", map[0][0].height);
 	map[0][size - 1].height = _random_num(roughness, MAX_RAND);
+	printf("%f ", map[0][size - 1].height);
 	map[size - 1][0].height = _random_num(roughness, MAX_RAND);
+	printf("%f ", map[size - 1][0].height);
 	map[size - 1][size - 1].height = _random_num(roughness, MAX_RAND);
+	printf("%f\n ", map[size - 1][size - 1].height);
 
 	float scale = roughness;
 	int step = size - 1;
@@ -73,6 +83,8 @@ void ds_gen_height_map (Tile** map, int size, float roughness) {
 	while (step > 1) {
 		diamond_step(map, size, step, scale);
 		square_step(map, size, step, scale);
+		print_map(map, size);
+		printf("\n");
 		step /= 2;
 	}
 }

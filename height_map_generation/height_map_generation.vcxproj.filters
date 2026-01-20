@@ -21,6 +21,9 @@
     <ClCompile Include="generation_alg.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="obj_place_algoritm.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="generation_alg.h">
@@ -29,10 +32,10 @@
     <ClInclude Include="Tile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Object.h">
+    <ClInclude Include="Config.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Config.h">
+    <ClInclude Include="obj_place_algoritm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

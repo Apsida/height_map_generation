@@ -1,8 +1,6 @@
 #include "generation_alg.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "Tile.h"
-#include "Object.h"
 
 int BLOOM = 1;
 
@@ -27,7 +25,7 @@ int main() {
 	int size = 5;
 	Tile** map = allocate_map(size);
 	Tile** smoothed = allocate_map(size);
-	ds_gen_height_map(map, size, 6.75f);
+	ds_gen_height_map(map, size, 0.75f);
 	//apply_gaussian_filter(map, smoothed, size, BLOOM);
 	print_map(smoothed, size);
 	return 0;
