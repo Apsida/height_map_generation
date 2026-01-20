@@ -8,26 +8,25 @@ int MAX_RAND = 5;
 //int SEED = 234121;
 
 
-static float _random_num (float range) {
-	float sign = (rand() % 2) ? -1.0f : 1.0f;
-	float a = range * MAX_RAND;
-	return (a / MAX_RAND) * sign;
+static float _random_num (float scale, float avg) {
+	double rand_val = (double)rand() / RAND_MAX;
+	return (scale * rand_val) + (1.0 - scale) * avg;
 }
 
-void diamond_step (float** map, int size, int step, float scale) {
+void diamond_step (Tile** map, int size, int step, float scale) {
 	int half = step / 2;
 	for (int y = half; y < size; y += step) {
 		for (int x = half; x < size; x += step) {
-			float avg = (map[y - half][x - half] +
-				map[y - half][x + half] +
-				map[y + half][x - half] +
-				map[y + half][x + half]) * 0.25f;
-			map[y][x] = avg + _random_num(scale);
+			float avg = (map[y - half][x - half].height +
+				map[y - half][x + half].height +
+				map[y + half][x - half].height +
+				map[y + half][x + half].height) * 0.25f;
+			map[y][x].height = _random_num(scale, avg);
 		}
 	}
 }
 
-void square_step (float** map, int size, int step, float scale) {
+void square_step (Tile** map, int size, int step, float scale) {
 	int half = step / 2;
 	for (int y = 0; y < size; y += half) {
 		int start_x = (y % step == 0) ? half : 0;
@@ -36,36 +35,37 @@ void square_step (float** map, int size, int step, float scale) {
 			int count = 0;
 
 			if (y >= half) {
-				sum += 1/map[y - half][x];
+				sum += 1/map[y - half][x].height;
 				count++;
 			}
 			if (y + half < size) {
-				sum += 1/map[y + half][x];
+				sum += 1/map[y + half][x].height;
 				count++;
 			}
 			if (x >= half) {
-				sum += 1/map[y][x - half];
+				sum += 1/map[y][x - half].height;
 				count++;
 			}
 			if (x + half < size) {
-				sum += 1/map[y][x + half];
+				sum += 1/map[y][x + half].height;
 				count++;
 			}
-			map[y][x] = count / sum + _random_num(scale);
+			printf("%f\n", sum / count);
+			map[y][x].height = sum / count + _random_num(scale, sum / count);
 		}
 	}
 }
 
-void ds_gen_height_map (float** map, int size, float roughness) {
+void ds_gen_height_map (Tile** map, int size, float roughness) {
 	int n = size - 1;
 	if (n <= 0 || (n & (n - 1)) != 0) {
 		printf("Err^ size must be 2^n+1\n");
 		exit(EXIT_FAILURE);
 	}
-	map[0][0] = _random_num(MAX_RAND);
-	map[0][size - 1] = _random_num(MAX_RAND);
-	map[size - 1][0] = _random_num(MAX_RAND);
-	map[size - 1][size - 1] = _random_num(MAX_RAND);
+	map[0][0].height = _random_num(roughness, MAX_RAND);
+	map[0][size - 1].height = _random_num(roughness, MAX_RAND);
+	map[size - 1][0].height = _random_num(roughness, MAX_RAND);
+	map[size - 1][size - 1].height = _random_num(roughness, MAX_RAND);
 
 	float scale = roughness;
 	int step = size - 1;
@@ -77,7 +77,7 @@ void ds_gen_height_map (float** map, int size, float roughness) {
 	}
 }
 
-void apply_gaussian_filter(float** input, float** output, int size, float sigma) {
+void apply_gaussian_filter(Tile** input, Tile** output, int size, float sigma) {
 	const int kernel_radius = 2;
 	const int kernel_size = 2 * kernel_radius + 1;
 	float kernel[5][5];
@@ -113,10 +113,10 @@ void apply_gaussian_filter(float** input, float** output, int size, float sigma)
 					if (ny >= size) ny = size - 1;
 					if (nx >= size) nx = size - 1;
 
-					value += input[ny][nx] * kernel[ky + kernel_radius][kx + kernel_radius];
+					value += input[ny][nx].height * kernel[ky + kernel_radius][kx + kernel_radius];
 				}
 			}
-			output[y][x] = value;
+			output[y][x].height = value;
 		}
 	}
 }
