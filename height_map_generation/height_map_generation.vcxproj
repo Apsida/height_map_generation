@@ -123,19 +123,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="biome_defin_alg.c" />
+    <ClCompile Include="biome_init_alg.c" />
     <ClCompile Include="generation_alg.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="map_IO.c" />
-    <ClCompile Include="obj_place_algoritm.c" />
+    <ClCompile Include="obj_init_algoritm.c" />
     <ClCompile Include="UI.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="biome_defin_alg.h" />
+    <ClInclude Include="biome_init_alg.h" />
+    <ClInclude Include="Biome.h" />
     <ClInclude Include="generation_alg.h" />
     <ClInclude Include="map_IO.h" />
     <ClInclude Include="Obj.h" />
-    <ClInclude Include="obj_place_algoritm.h" />
+    <ClInclude Include="obj_init_algoritm.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="Tile_param.h" />
     <ClInclude Include="UI.h" />

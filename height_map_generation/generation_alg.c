@@ -14,17 +14,17 @@ static float**allocate_map(int size) {
 
 static float _random_num (float roughness, float avg) {
 	float rand_val = (float)rand() / RAND_MAX;
-	return (roughness * rand_val  + (1.0 - roughness) * avg);
+	return (roughness * rand_val  + (1.0f - roughness) * avg);
 }
 
 void diamond_step (float** map, int size, int step, float roughness) {
 	int half = step / 2;
 	for (int y = half; y < size; y += step) {
 		for (int x = half; x < size; x += step) {
-			float avg = (1/map[y - half][x - half] +
-				1/map[y - half][x + half] +
-				1/map[y + half][x - half] +
-				1/map[y + half][x + half]) * 4;
+			float avg = (map[y - half][x - half] +
+				map[y - half][x + half] +
+				map[y + half][x - half] +
+				map[y + half][x + half]) / 4;
 			map[y][x] = _random_num(roughness, avg);
 		}
 	}
@@ -39,27 +39,27 @@ void square_step (float** map, int size, int step, float roughness) {
 			int count = 0;
 
 			if (y >= half) {
-				sum += 1/map[y - half][x];
+				sum += map[y - half][x];
 				count++;
 			}
 			if (y + half < size) {
-				sum += 1/map[y + half][x];
+				sum += map[y + half][x];
 				count++;
 			}
 			if (x >= half) {
-				sum += 1/map[y][x - half];
+				sum += map[y][x - half];
 				count++;
 			}
 			if (x + half < size) {
-				sum += 1/map[y][x + half];
+				sum += map[y][x + half];
 				count++;
 			}
-			map[y][x] = _random_num(roughness, sum * count);
+			map[y][x] = _random_num(roughness, sum / count);
 		}
 	}
 }
 
-float** ds_gen_height_map (int size, float roughness, int max_rand) {
+float** ds_gen_height_map (int size, float roughness) {
 	float** map = allocate_map(size);
 	int n = size - 1;
 	if (n <= 0 || (n & (n - 1)) != 0) {

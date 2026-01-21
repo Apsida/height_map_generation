@@ -21,13 +21,13 @@
     <ClCompile Include="generation_alg.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="obj_place_algoritm.c">
+    <ClCompile Include="obj_init_algoritm.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="map_IO.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="biome_defin_alg.c">
+    <ClCompile Include="biome_init_alg.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="UI.c">
@@ -41,7 +41,7 @@
     <ClInclude Include="Tile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="obj_place_algoritm.h">
+    <ClInclude Include="obj_init_algoritm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Tile_param.h">
@@ -50,13 +50,16 @@
     <ClInclude Include="map_IO.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="biome_defin_alg.h">
+    <ClInclude Include="biome_init_alg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="UI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Obj.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Biome.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

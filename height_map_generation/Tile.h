@@ -1,7 +1,9 @@
 #pragma once
+#include "Biome.h"
+#include "Obj.h"
 typedef struct Tile {
 	float height;
 	float temperature;
-	char* biome;
-	void* obj;
+	Biome* biome;
+	Obj* obj;
 }Tile;
