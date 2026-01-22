@@ -6,8 +6,16 @@
 
 static float**allocate_map(int size) {
 	float** map = (float**)malloc(size * sizeof(float*));
+	if (map == NULL) {
+		printf("ERR: cant allocate memory");
+		exit(EXIT_FAILURE);
+	}
 	for (int i = 0; i < size; i++) {
 		map[i] = (float*)malloc(size * sizeof(float));
+		if (map[i] == NULL) {
+			printf("ERR: cant allocate memory");
+			exit(EXIT_FAILURE);
+		}
 	}
 	return map;
 }

@@ -7,7 +7,8 @@
 void objs_place_alg(Tile** map, int size, Obj* obj_type, int obj_type_count) {
 	//Идём по списку всех типов объектов
 	for (int i = 0; i < obj_type_count; i++) {
-		while (obj_type[i].obj_count > 0) {
+		int k = obj_type[i].obj_count;
+		while (k > 0) {
 			//Случайно выбираем Тайл
 			int x = rand() % size;
 			int y = rand() % size;
@@ -30,7 +31,7 @@ void objs_place_alg(Tile** map, int size, Obj* obj_type, int obj_type_count) {
 					exit(EXIT_FAILURE);
 				}
 				*map[y][x].obj = obj_type[i];
-				obj_type[i].obj_count--;
+				k--;
 			}
 		}
 	}	

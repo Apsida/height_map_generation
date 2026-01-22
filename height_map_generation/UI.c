@@ -9,7 +9,6 @@ void view_count_biomes(Tile**map, int size, Biome* biome_list, int biome_count) 
 		int k = 0;
 		for (int y = 0; y < size; y++) {
 			for (int x = 0;x < size;x++) {
-				printf("enter");
 				if (str_cmp(map[y][x].biome->name, biome_list[i].name)) {
 					k++;
 				}
@@ -51,6 +50,11 @@ Biome* receive_biome_list(int* biome_count, int max_h, int max_t) {
 		return NULL;
 	}
 	Biome* biome_list = malloc(n * sizeof(Biome));
+	if (biome_list == NULL) {
+		printf("ERR: cant allocate memory");
+		exit(EXIT_FAILURE);
+	}
+
 	printf("Input parametres of object: ");
 	for (int i = 0; i < n; i++) {
 		Biome ob;
@@ -88,6 +92,11 @@ Obj* receive_obj_list(Tile** map, int size,int* obj_type_count) {
 		return NULL;
 	}
 	Obj* obj_list = malloc(n * sizeof(Obj));
+	if (obj_list == NULL) {
+		printf("ERR: cant allocate memory");
+		exit(EXIT_FAILURE);
+	}
+
 	printf("Input parametres of object: ");
 	for (int i = 0; i < n; i++) {
 		Obj ob;

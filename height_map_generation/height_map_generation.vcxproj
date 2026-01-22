@@ -129,6 +129,7 @@
     <ClCompile Include="map_IO.c" />
     <ClCompile Include="objs_place_alg.c" />
     <ClCompile Include="str_lib.c" />
+    <ClCompile Include="TEST.c" />
     <ClCompile Include="UI.c" />
   </ItemGroup>
   <ItemGroup>
@@ -139,6 +140,7 @@
     <ClInclude Include="Obj.h" />
     <ClInclude Include="objs_place_alg.h" />
     <ClInclude Include="str_lib.h" />
+    <ClInclude Include="TEST.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="Tile_param.h" />
     <ClInclude Include="UI.h" />

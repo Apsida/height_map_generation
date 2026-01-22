@@ -1,6 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "map_IO.h"
+
+void set_seed(unsigned int seed) {
+	if (seed == 0) {
+		srand(time(NULL));
+	}
+	else {
+		srand(seed);
+	}
+}
 
 static void set_null(Tile** map, int size) {
 	for (int y = 0; y < size; y++) {
@@ -12,8 +22,16 @@ static void set_null(Tile** map, int size) {
 
 Tile** allocate_map(int size) {
 	Tile** map = (Tile**)malloc(size * sizeof(Tile*));
+	if (map == NULL) {
+		printf("ERR: cant allocate memory");
+		exit(EXIT_FAILURE);
+	}
 	for (int i = 0; i < size; i++) {
 		map[i] = (Tile*)malloc(size * sizeof(Tile));
+		if (map[i] == NULL) {
+			printf("ERR: cant allocate memory");
+			exit(EXIT_FAILURE);
+		}
 	}
 	set_null(map, size);
 	return map;
@@ -59,7 +77,7 @@ void fill_map(Tile** map, float** filler, tile_param param, int size, int max_va
 void save_info(Tile** map, int size) {
 	FILE* file1 = fopen("height.txt", "w");
 	if (file1 == NULL) {
-		perror("Ошибка открытия файла");
+		perror("ERR: cant open file");
 		return 1;
 	}
 	for (int i = 0; i < size; i++) {
@@ -71,7 +89,7 @@ void save_info(Tile** map, int size) {
 	fclose(file1);
 	FILE* file = fopen("temper.txt", "w");
 	if (file == NULL) {
-		perror("Ошибка открытия файла");
+		perror("ERR: cant open file");
 		return 1;
 	}
 	for (int i = 0; i < size; i++) {
@@ -81,5 +99,5 @@ void save_info(Tile** map, int size) {
 		fprintf(file, "\n");
 	}
 	fclose(file);
-	printf("Массив успешно записан в файл temper.txt\n");
+	printf("Parametres of map save in temper.txt and height.exe\n");
 }

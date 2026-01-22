@@ -36,6 +36,9 @@
     <ClCompile Include="str_lib.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TEST.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="generation_alg.h">
@@ -66,6 +69,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="str_lib.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TEST.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
