@@ -2,5 +2,6 @@
 typedef enum tile_param {
 	HEIGHT,
 	TEMPERATURE,
-	BIOME
+	BIOME,
+	OBJECT
 }tile_param;

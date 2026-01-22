@@ -2,11 +2,20 @@
 #include <stdlib.h>
 #include "map_IO.h"
 
+static void set_null(Tile** map, int size) {
+	for (int y = 0; y < size; y++) {
+		for (int x = 0; x < size;x++) {
+			map[y][x].obj = NULL;
+		}
+	}
+}
+
 Tile** allocate_map(int size) {
 	Tile** map = (Tile**)malloc(size * sizeof(Tile*));
 	for (int i = 0; i < size; i++) {
 		map[i] = (Tile*)malloc(size * sizeof(Tile));
 	}
+	set_null(map, size);
 	return map;
 }
 
@@ -21,6 +30,14 @@ void print_map(Tile** map, int size, tile_param param) {
 			}
 			else if (param == BIOME) {
 				printf("%c", map[y][x].biome->name[0]);
+			}
+			else if (param == OBJECT) {
+				if (map[y][x].obj != NULL) {
+					printf("%c", map[y][x].obj->name[0]);
+				}
+				else {
+					printf("%c", map[y][x].biome->name[0]);
+				}
 			}
 		}
 		printf("\n");

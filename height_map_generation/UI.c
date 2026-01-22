@@ -1,25 +1,33 @@
-#include "UI.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "UI.h"
+#include "str_lib.h"
+#include "map_IO.h"
 
-static char* str_read() {
-	char* str = malloc(sizeof(char)*20);
-	char c = getchar();
-	for (int i = 0; i < 20; i++) {
-		c = getchar();
-		str[i] = c;
-		if (c == '\n' && i != 0) {
-			str[i] = '\0';
-			return str;
+void view_count_biomes(Tile**map, int size, Biome* biome_list, int biome_count) {
+	for (int i = 0; i < biome_count; i++) {
+		int k = 0;
+		for (int y = 0; y < size; y++) {
+			for (int x = 0;x < size;x++) {
+				printf("enter");
+				if (str_cmp(map[y][x].biome->name, biome_list[i].name)) {
+					k++;
+				}
+			}
 		}
+		printf("count of %s: %d\n", biome_list[i].name, k);
 	}
-	return str;
 }
 
-void map_init(int* size, int* max_height, int* max_temper, 
-	unsigned int* seed, float* roughness, int* bloom) {
+Tile** map_init(int* size, int* max_height, int* max_temper, 
+	unsigned int* seed, float* roughness) {
 	printf("Size of map: ");
 	scanf_s("%d", size);
+	int n = *size - 1;
+	if (n <= 0 || (n & (n - 1)) != 0) {
+		printf("Err^ size must be 2^n+1\n");
+		exit(EXIT_FAILURE);
+	}
 	printf("MAX_HEIGHT: ");
 	scanf_s("%d", max_height);
 	printf("MAX_TEMPERATURE: ");
@@ -28,8 +36,11 @@ void map_init(int* size, int* max_height, int* max_temper,
 	scanf_s("%u", seed);
 	printf("ROUGHNESS (from 0 to 1): ");
 	scanf_s("%f", roughness);
-	printf("BLOOM (0 or 1): ");
-	scanf_s("%d", bloom);
+	if (*roughness > 1 || *roughness < 0) {
+		printf("Err of input");
+		exit(EXIT_FAILURE);
+	}
+	return allocate_map(*size);
 }
 
 Biome* receive_biome_list(int* biome_count, int max_h, int max_t) {
@@ -69,28 +80,31 @@ Biome* receive_biome_list(int* biome_count, int max_h, int max_t) {
 	return biome_list;
 }
 
-Obj* receive_obj_list(int* obj_count) {
+Obj* receive_obj_list(Tile** map, int size,int* obj_type_count) {
 	int n;
-	printf("Input count of objects ");
+	printf("Input count of types of objects ");
 	scanf_s("%d", &n);
 	if (n == 0) {
 		return NULL;
 	}
 	Obj* obj_list = malloc(n * sizeof(Obj));
-	printf("Input parametres of object:\n name: ");
+	printf("Input parametres of object: ");
 	for (int i = 0; i < n; i++) {
 		Obj ob;
-		ob.id = i;
-		if (fgets(ob.name, sizeof(ob.name), stdin) == NULL) {
-			printf("Err of input");
+		printf("name:");
+		ob.name = str_read();
+		printf("biome in which appears:");
+		ob.biome = str_read();
+		int bcm = biome_check(map, size, ob.biome);
+		printf("Count of biomes on map: %d\n Input count of object: ", bcm);
+		scanf_s("%d", &ob.obj_count);
+		if (ob.obj_count > bcm) {
+			printf("ERROR OF COUNT: count of objects > count of biomes");
 			exit(EXIT_FAILURE);
 		}
-		else {
-			ob.name[strcspn(ob.name, "\n")] = '\0';
-		}
-		printf("popability of spawn: ");
-		scanf_s("%f", &ob.probability);
+		obj_list[i] = ob;
+
 	}
-	*obj_count = n;
+	*obj_type_count = n;
 	return obj_list;
 }
